@@ -1,50 +1,85 @@
-module.exports = (io) =>{
+const fs = require('fs');
+
+module.exports = (io) => {
 
     let nickNames = [];
+    let socketsUsers = new Map();
 
-    io.on('connection', socket =>{
-        console.log('Nuevo usuario conectado');
+    io.on('connection', socket => {
+        console.log('New socket conected');
 
-        //Mensajes enviados
-        socket.on('enviar mensaje', (datos) =>{
-            
-            
-            io.sockets.emit('nuevo mensaje', {
-                msg: datos,
+        socket.on('new image', (file, callback) => {
+            console.log(file);
+
+            io.sockets.emit('new image message', {
+                msg: file,
+                nick: socket.nickname
+            });
+            fs.writeFile("images/img", file, (err) => {
+                callback({ message: err ? "failure" : "success" });
+            });
+        });
+
+        socket.on('send message', (data) => {
+            io.sockets.emit('new message', {
+                msg: data,
                 nick: socket.nickname
             });
         });
 
+        socket.on('private message', (data) => {
+            console.log(data);
+            let str = data;
+            let res = str.split(" ");
 
-        socket.on('nuevo usuario', (datos, callback) => {
+            const user = res[0].slice(1);
 
-            //Validación de nombre de usuario
-            if(nickNames.indexOf(datos) != -1){
+            if (nickNames.indexOf(user) != -1) {
+
+                const socketid = socketsUsers.get(user).id;
+
+                const space = data.indexOf(" ");
+
+                if (space !== -1) {
+                    data = data.substring(space + 1);
+                }
+
+                io.to(socketid).emit('new message', {
+                    msg: `Priv: ${data}`,
+                    nick: socket.nickname
+                });
+
+                io.to(socket.id).emit('new message', {
+                    msg: `Priv[${user}]: ${data}`,
+                    nick: socket.nickname
+                });
+            }
+        });
+
+        socket.on('new user', (data, callback) => {
+
+            if (nickNames.indexOf(data) != -1) {
                 callback(false);
-            }else{
-                
+            } else {
                 callback(true);
-                socket.nickname = datos;
+                socket.nickname = data;
+                console.log(`New user ${socket.nickname}`)
                 nickNames.push(socket.nickname);
-                
-                actualizarUsuarios();
+                socketsUsers.set(data, socket);
+                updateUsers();
             }
         });
 
-        socket.on('disconnect', datos =>{
-            //Desconexión de usuario
-            if(!socket.nickname){
+        socket.on('disconnect', data => {
+            if (!socket.nickname) {
                 return;
-            }else{
-                
+            } else {
                 nickNames.splice(nickNames.indexOf(socket.nickname), 1);
-
-                
-                actualizarUsuarios();
+                updateUsers();
             }
         });
 
-        function actualizarUsuarios(){
+        function updateUsers() {
             io.sockets.emit('usernames', nickNames);
         }
 

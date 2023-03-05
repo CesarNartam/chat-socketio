@@ -11,81 +11,79 @@
 
     </head>
 
-    <body>
+    
+<body class="vh-100">
+    <nav class="navbar bg-success position-fixed w-100">
+        <div class="container-fluid">
+            <a class="navbar-brand text-light" href="#">
+                Chat with Socket.IO
+            </a>
+        </div>
+    </nav>
 
-
-        <nav class="nav navbar-dark bg-dark">
-            <a class="nav navbar-brand mx-auto" href="/">Chat Privado</a>
-        </nav>
-
-        <!-- Usuario-->
-
-        <div class="card col-md-4 mx-auto mt-5" id="nick-wrap">
+    <div class="h-100 d-flex align-items-center">
+        <div class="card col-md-4 mx-auto" id="nick-wrap">
             <div class="card-header">
-                <h4>Introduce tu usuario</h4>
+                <h4>Choose a username</h4>
             </div>
             <p id="nick-error"></p>
             <div class="card-body">
                 <form id="nick-form">
-                    <input type="text" id="nick-name" class="form-control">
-                    <button type="submit" class="btn btn-success mt-3" id="nick-btn"><i class="fas fa-sign-in-alt"></i> Acceder</button>
+                    <input type="text" id="nick-name" class="form-control" autocomplete="off">
+                    <button type="submit" class="btn btn-success mt-3" id="nick-btn"><i class="fas fa-sign-in-alt"></i>
+                        Login</button>
                 </form>
-
             </div>
-
         </div>
-
-        <!-- Chat-->
-
         <div class="container" id="content-wrap">
-            
-            <div class="row">
-                <div class="col-md-7 offset-md-1 mt-5">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Chat</h4>
-                        </div>
-                        <div id="chat" class="card-body overflow-scroll">
-    
-                        </div>
-                        <form id="messages-form" class="card-footer">
-                            <div class="input-group">
-                                <input class="form-control" type="text" name="" id="message">
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Enviar</button>
-                                </div>
-    
-                            </div>
-                            
-                        </form>
-    
-                    </div>
-    
-                </div>
-    
-                <!-- Lista de usuarios-->
-    
-                <div class="col-md-3 mt-5">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Usuarios conectados</h4>
-                        </div>
-        
-                        <div class="card-body"> 
-                            <div id="usernames">
-        
-                            </div>
-                        </div>
 
+            <div class="row">
+                <div class="col-md-7 offset-md-1 mt-5 d-flex align-items-center">
+                    <div class="card h-75 w-100">
+                        <div class="card-header">
+                            <h4>Group chat</h4>
+                            <h6>/username to whisper a specific user</h6>
+                        </div>
+                        <div id="chat" class="card-body overflow-auto">
+                        </div>
+                        <form id="messages-form" class="w-100 card-footer d-flex">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="text" autocomplete="off" id="message"
+                                    placeholder="type a message..." aria-label="type a message..."
+                                    aria-describedby="basic-addon2">
+                                <div class="input-group-append mx-1">
+                                    <button type="submit" class="btn btn-success">Send</button>
+                                </div>
+                            </div>
+                        </form>
+                        <form id="images-form" class="w-100 card-footer d-flex">
+                            <div class="input-group mb-3">
+                                <input class="form-control" type="file" id="image-box"
+                                    aria-describedby="basic-addon2">
+                                <div class="input-group-append mx-1">
+                                    <button type="submit" class="btn btn-success">Send</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-4 mt-5 d-flex align-items-center">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Online users</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="usernames">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-        <script src="/socket.io/socket.io.js" charset="utf-8"></script>
-        <script src="./js/main.js"></script>
-
-    </body>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js" charset="utf-8"></script>
+    <script src="./js/main.js"></script>
+</body>
 </html>

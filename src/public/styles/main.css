@@ -23,10 +23,10 @@ body{
     padding-bottom: 10px;
 }
 
-.salir:hover{
+.go-out:hover{
     cursor: pointer;
 }
 
-.enlace-salir{
+.link-go-out{
     color:#027f43;
 }
